@@ -1,5 +1,7 @@
 {% extends 'geoip/base_redirect.html' %}
 
 {% block overlay_content %}
-    <h1>Greetings user from {{ redirect.incoming_country_code }}</h1>
+    <h1>Greetings user from {{ incoming_country_code }}</h1>
+    {% if custom_message %}{{ custom_message|linebreaks }}{% endif %}
+    {% if custom_image %}<img id="redirect-customimage" src="{{ custom_image.url }}" />{% endif %}
 {% endblock %}

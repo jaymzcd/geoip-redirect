@@ -33,13 +33,11 @@ class GeoIPMiddleWare(object):
             # Slight hack above to avoid hooking into admin
             code_index = list(ccodes).index(user_code) # use this to grab the template data
             redirect_data = redirect_list[code_index] # in theory this is the right one
-            context = dict(redirect=redirect_data)
-
+            context = dict(redirect_data.__dict__)
             if redirect_data.custom_message is not None:
                 inject_data = render_to_string('geoip/custom_redirect.html', context)
             else:
                 inject_data = self.redirect_inject # use one from __init__ time
-
             response.content = smart_str(response.content) + \
                 smart_str(inject_data)
 
