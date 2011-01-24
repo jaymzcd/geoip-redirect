@@ -39,7 +39,7 @@ class GeoIPMiddleWare(object):
         else:
             inject_data = self.redirect_from_admin()
 
-        if '/admin' not in request.path:
+        if '/admin' not in request.path and inject_data:
             # Slight hack for now to avoid spoiling admin
             response.content = smart_str(response.content) + \
                 smart_str(inject_data)
@@ -57,5 +57,9 @@ class GeoIPMiddleWare(object):
             inject_data = render_to_string('geoip/custom_redirect.html', context)
             return inject_data
         else:
-            raise NoGeoRedirectFound('Could not find a geo-redirect for this county in admin')
+            if geo_setting('FAIL_ON_MISSING'):
+                raise NoGeoRedirectFound('Could not find a geo-redirect for this county in admin')
+            else:
+                return None
+
 
