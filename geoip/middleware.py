@@ -19,5 +19,6 @@ class GeoIPMiddleWare(object):
 
         if user_code in redirect_list and r'/admin' not in request.path:
             # Slight hack above to avoid hooking into admin
-            response.content = smart_str(response.content) + smart_str(self.redirect_inject)
+            response.content = smart_str(response.content) + \
+                smart_str(self.redirect_inject)
         return response
