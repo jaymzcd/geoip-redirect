@@ -33,7 +33,7 @@ class GeoIPMiddleWare(object):
 
         self.user_code = GeoIPRecord.get_code(inbound_ip)
 
-        if(geo_setting('REDIRECT_ALL')):
+        if(geo_setting('REDIRECT_ALL') and self.user_code in geo_setting('REDIRECT_CODES')):
             context = dict(incoming_country_code=self.user_code, target_domain=self.REDIRECT_DOMAIN)
             inject_data = render_to_string('geoip/base_redirect.html', context)
         else:
