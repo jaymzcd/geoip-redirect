@@ -3,9 +3,7 @@ from django.db import models
 class GeoIPRecord(models.Model):
     """ The source data for this table can be found at
     http://www.maxmind.com/app/geoip_country. Fields are as they are from
-    that file so load in via the following sql once you've ran syncdb:
-
-    """
+    that file so load in via the process in the README """
 
     start_ip = models.IPAddressField()
     end_ip = models.IPAddressField()
