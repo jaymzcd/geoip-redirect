@@ -16,6 +16,7 @@ class GeoIPMiddleWare(object):
             self.REDIRECT_DOMAIN = geo_setting('REDIRECT_DOMAIN')
         else:
             self.REDIRECT_DOMAIN = None
+        self.user_code = None
 
 
     def process_response(self, request, response):
@@ -30,13 +31,13 @@ class GeoIPMiddleWare(object):
         else:
             inbound_ip = request.META['REMOTE_ADDR']
 
-        user_code = GeoIPRecord.get_code(inbound_ip)
+        self.user_code = GeoIPRecord.get_code(inbound_ip)
 
         if(geo_setting('REDIRECT_ALL')):
-            context = dict(incoming_country_code=user_code, target_domain=self.REDIRECT_DOMAIN)
+            context = dict(incoming_country_code=self.user_code, target_domain=self.REDIRECT_DOMAIN)
             inject_data = render_to_string('geoip/base_redirect.html', context)
         else:
-            inject_data = redirect_from_admin(user_code)
+            inject_data = self.redirect_from_admin()
 
         response.content = smart_str(response.content) + \
             smart_str(inject_data)
@@ -44,12 +45,11 @@ class GeoIPMiddleWare(object):
         return response
 
 
-    @classmethod
-    def redirect_from_admin(user_code):
+    def redirect_from_admin(self):
         redirect_list = IPRedirectEntry.objects.all()
         ccodes = redirect_list.values_list('incoming_country_code', flat=True)
-        if user_code in ccodes:
-            code_index = list(ccodes).index(user_code) # use this to grab the template data
+        if self.user_code in ccodes:
+            code_index = list(ccodes).index(self.user_code) # use this to grab the template data
             redirect_data = redirect_list[code_index] # in theory this is the right one
             context = dict(redirect_data.__dict__)
             inject_data = render_to_string('geoip/custom_redirect.html', context)
