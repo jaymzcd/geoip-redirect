@@ -1,0 +1,5 @@
+{% extends 'geoip/base_redirect.html' %}
+
+{% block overlay_content %}
+    <h1>Greetings user from {{ redirect.incoming_country_code }}</h1>
+{% endblock %}
