@@ -39,8 +39,10 @@ class GeoIPMiddleWare(object):
         else:
             inject_data = self.redirect_from_admin()
 
-        response.content = smart_str(response.content) + \
-            smart_str(inject_data)
+        if '/admin' not in request.path:
+            # Slight hack for now to avoid spoiling admin
+            response.content = smart_str(response.content) + \
+                smart_str(inject_data)
 
         return response
 
