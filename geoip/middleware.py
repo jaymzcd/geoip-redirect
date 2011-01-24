@@ -1,17 +1,22 @@
 from django.template.loader import render_to_string
 from geoip.models import GeoIPRecord, IPRedirectEntry
 from geoip.conf import geo_setting
+from geoip.exceptions import NoGeoRedirectFound
 from django.conf import settings
 from django.utils.encoding import smart_str
 
 class GeoIPMiddleWare(object):
 
     def __init__(self):
-        self.redirect_inject = render_to_string('geoip/base_redirect.html')
         if geo_setting('DEBUG_IP'):
             self.DEBUG_IP = geo_setting('DEBUG_IP')
         else:
             self.DEBUG_IP = False
+        if geo_setting('REDIRECT_DOMAIN'):
+            self.REDIRECT_DOMAIN = geo_setting('REDIRECT_DOMAIN')
+        else:
+            self.REDIRECT_DOMAIN = None
+
 
     def process_response(self, request, response):
         """ Read in the users IP address from the request object. If we
@@ -26,19 +31,29 @@ class GeoIPMiddleWare(object):
             inbound_ip = request.META['REMOTE_ADDR']
 
         user_code = GeoIPRecord.get_code(inbound_ip)
-        redirect_list = IPRedirectEntry.objects.all()
 
+        if(geo_setting('REDIRECT_ALL')):
+            context = dict(incoming_country_code=user_code, target_domain=self.REDIRECT_DOMAIN)
+            inject_data = render_to_string('geoip/base_redirect.html', context)
+        else:
+            inject_data = redirect_from_admin(user_code)
+
+        response.content = smart_str(response.content) + \
+            smart_str(inject_data)
+
+        return response
+
+
+    @classmethod
+    def redirect_from_admin(user_code):
+        redirect_list = IPRedirectEntry.objects.all()
         ccodes = redirect_list.values_list('incoming_country_code', flat=True)
-        if user_code in ccodes and r'/admin' not in request.path:
-            # Slight hack above to avoid hooking into admin
+        if user_code in ccodes:
             code_index = list(ccodes).index(user_code) # use this to grab the template data
             redirect_data = redirect_list[code_index] # in theory this is the right one
             context = dict(redirect_data.__dict__)
-            if redirect_data.custom_message is not None:
-                inject_data = render_to_string('geoip/custom_redirect.html', context)
-            else:
-                inject_data = self.redirect_inject # use one from __init__ time
-            response.content = smart_str(response.content) + \
-                smart_str(inject_data)
+            inject_data = render_to_string('geoip/custom_redirect.html', context)
+            return inject_data
+        else:
+            raise NoGeoRedirectFound('Could not find a geo-redirect for this county in admin')
 
-        return response

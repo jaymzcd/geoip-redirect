@@ -4,3 +4,7 @@ class NoGeoIPException(Exception):
 
 class InvalidDottedIP(Exception):
     pass
+
+class NoGeoRedirectFound(Exception):
+    pass
+
