@@ -2,7 +2,18 @@
 
 ## A django app to redirect based on an ip lookup
 
-### Data source
+### Installation
+Installing this is pretty simple - add the middleware and then configure it as
+you need. You can test it by giving it an IP to *always* return regardless
+of the user's current REMOTE_ADDR value.
+
+Add:
+
+    'geoip.middleware.GeoIPMiddleWare',
+
+To your MIDDLEWARE_CLASSES tuple and *geoip* to your INSTALLED_APPS.
+
+### Ip Lookup Data source
 
 Database via: http://www.maxmind.com/app/geoip_country
 
