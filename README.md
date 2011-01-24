@@ -13,6 +13,18 @@ Add:
 
 To your MIDDLEWARE_CLASSES tuple and *geoip* to your INSTALLED_APPS.
 
+### Usage
+
+You have 2 options - you can enable **REDIRECT_ALL** in the geoip settings
+file & supply a list of codes or you can add admin entries with custom text
+and domains per country code.
+
+So if you want to just redirect France, Great Britain and Germany and you
+don't want to have different targets for each you could just set **REDIRECT_ALL**
+to *True* and then set **REDIRECT_CODES** to *['GB', 'FR', 'DE']*. Alternativly
+you can add set it to *False* and add entries to the admin within *Ip
+Redirect Entry*.
+
 ### Ip Lookup Data source
 
 Database via: http://www.maxmind.com/app/geoip_country
