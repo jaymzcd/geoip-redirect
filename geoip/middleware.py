@@ -9,5 +9,7 @@ class GeoIPMiddleWare(object):
 
     def process_response(self, request, response):
         response.content = smart_str(response.content) + smart_str(self.redirect_inject)
+        user_code = GeoIPRecord.get_code('92.52.69.82')
+        
         return response
 

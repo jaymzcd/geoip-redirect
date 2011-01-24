@@ -15,3 +15,7 @@ And then load in via a CSV import
     LOAD DATA LOCAL INFILE "geo2.csv" INTO TABLE geoip_geoiprecord
     FIELDS TERMINATED BY ',' ENCLOSED BY '"';
 
+### Notes
+
+You should be aware that within this the UK is set as *GB* when you add an "ip
+redirect entry".
