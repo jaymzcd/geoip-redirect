@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
 
 def sample_view(request):
-    return HttpResponse('I am a sample response')
+    return render_to_response('master.html')

@@ -1,9 +1,13 @@
+from django.template.loader import render_to_string
+from geoip.models import GeoIPRecord
+from django.utils.encoding import smart_str
 
 class GeoIPMiddleWare(object):
 
     def __init__(self):
-        pass
+        self.redirect_inject = render_to_string('geoip/redirect.html')
 
     def process_response(self, request, response):
+        response.content = smart_str(response.content) + smart_str(self.redirect_inject)
         return response
 
