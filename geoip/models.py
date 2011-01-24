@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from geoip.conf import geo_setting
 from geoip.exceptions import NoGeoIPException, InvalidDottedIP
 
 class GeoIPRecord(models.Model):
@@ -33,7 +35,10 @@ class GeoIPRecord(models.Model):
         try:
             return bounds[0].country_code
         except IndexError:
-            raise NoGeoIPException
+            if settings.DEBUG and geo_setting('FAIL_ON_MISSING'):
+                raise NoGeoIPException
+            else:
+                pass
 
     @staticmethod
     def to_decimal(ip_str):
@@ -44,7 +49,10 @@ class GeoIPRecord(models.Model):
         if(len(chunks)==4):
             return sum([int(chunks[x])*mults[x] for x in range(0,4)])
         else:
-            raise InvalidDottedIP('Could not convert to decimal')
+            if settings.DEBUG:
+                raise InvalidDottedIP('Could not convert to decimal')
+            else:
+                pass
 
 class IPRedirectEntry(models.Model):
     """ This model is used to admin the active redirects for the middleware """
@@ -52,6 +60,7 @@ class IPRedirectEntry(models.Model):
     incoming_country_code = models.CharField(max_length=2, unique=True)
     target_domain = models.URLField(verify_exists=False)
     custom_message = models.TextField(blank=True, null=True)
+    custom_image = models.ImageField(upload_to='uploads/geoip/', blank=True, null=True)
 
     def __unicode__(self):
         return '%s - %s' % (self.incoming_country_code, self.target_domain)

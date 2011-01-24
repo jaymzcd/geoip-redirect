@@ -8,10 +8,10 @@ class GeoIPMiddleWare(object):
         self.redirect_inject = render_to_string('geoip/redirect.html')
 
     def process_response(self, request, response):
-        response.content = smart_str(response.content) + smart_str(self.redirect_inject)
-        user_code = GeoIPRecord.get_code('92.52.69.82')
+        inbound_ip = request.META['REMOTE_ADDR']
+        user_code = GeoIPRecord.get_code(inbound_ip)
         redirect_list = IPRedirectEntry.objects.all().values_list('incoming_country_code', flat=True)
-        print user_code
-        print redirect_list
-        return response
 
+        if user_code in redirect_list and r'/admin' not in request.path:
+            response.content = smart_str(response.content) + smart_str(self.redirect_inject)
+        return response
