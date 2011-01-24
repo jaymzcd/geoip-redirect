@@ -1,1 +1,3 @@
 * Add ability to only show once based on a cookie to hide
+* Hook in so we can redirect when we dont know where they're from (started via
+  the new settings added for MISSING_X)
