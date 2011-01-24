@@ -55,3 +55,9 @@ class IPRedirectEntry(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.incoming_country_code, self.target_domain)
+
+    def save(self):
+        # Force the country code to always be uppercase to match the
+        # db data that we have imported
+        self.incoming_country_code = self.incoming_country_code.upper()
+        super(IPRedirectEntry, self).save()
