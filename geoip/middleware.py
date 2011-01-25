@@ -50,6 +50,7 @@ class GeoIPMiddleWare(object):
 
             if not self.ignore_paths or \
                 (self.ignore_paths and request.path not in self.ignore_paths):
+
                 # We'll only inject the redirect code if we are not set to
                 # process the IgnoreURL's or if its not in the ignore list
                 response.content = smart_str(response.content) + \

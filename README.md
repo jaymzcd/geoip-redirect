@@ -25,6 +25,11 @@ to *True* and then set **REDIRECT_CODES** to *['GB', 'FR', 'DE']*. Alternativly
 you can add set it to *False* and add entries to the admin within *Ip
 Redirect Entry*.
 
+You can avoid handling particular URLs on the site by adding them to the
+IgnoreURL patterns and settings **PROCESS_IGNORES** to *True* in settings. This
+will do a lookup when the middleware starts and cache a list of URLs to ignore.
+These are simply CharFields for now.
+
 ### Ip Lookup Data source
 
 Database via: http://www.maxmind.com/app/geoip_country
