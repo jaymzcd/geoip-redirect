@@ -1,5 +1,5 @@
 from django.template.loader import render_to_string
-from geoip.models import GeoIPRecord, IPRedirectEntry
+from geoip.models import GeoIPRecord, IPRedirectEntry, IgnoreURL
 from geoip.conf import geo_setting
 from geoip.exceptions import NoGeoRedirectFound
 from django.conf import settings
@@ -16,6 +16,12 @@ class GeoIPMiddleWare(object):
             self.REDIRECT_DOMAIN = geo_setting('REDIRECT_DOMAIN')
         else:
             self.REDIRECT_DOMAIN = None
+        if geo_setting('PROCESS_IGNORES'):
+            self.ignore_paths = IgnoreURL.objects.all()\
+                .values_list('url', flat=True)
+        else:
+            self.ignore_paths = None
+
         self.user_code = None
 
 
@@ -41,8 +47,13 @@ class GeoIPMiddleWare(object):
 
         if '/admin' not in request.path and inject_data:
             # Slight hack for now to avoid spoiling admin
-            response.content = smart_str(response.content) + \
-                smart_str(inject_data)
+
+            if not self.ignore_paths or \
+                (self.ignore_paths and request.path not in self.ignore_paths):
+                # We'll only inject the redirect code if we are not set to
+                # process the IgnoreURL's or if its not in the ignore list
+                response.content = smart_str(response.content) + \
+                    smart_str(inject_data)
 
         return response
 

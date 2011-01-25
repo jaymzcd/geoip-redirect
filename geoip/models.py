@@ -70,3 +70,13 @@ class IPRedirectEntry(models.Model):
         # db data that we have imported
         self.incoming_country_code = self.incoming_country_code.upper()
         super(IPRedirectEntry, self).save()
+
+
+class IgnoreURL(models.Model):
+    """ Url paths to ignore from showing a redirect on """
+
+    url = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.url
+
