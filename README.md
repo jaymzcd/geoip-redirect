@@ -32,7 +32,7 @@ These are simply CharFields for now.
 
 ### Ip Lookup Data source
 
-Database via: http://www.maxmind.com/app/geoip_country
+Database via: [maxmind](http://www.maxmind.com/app/geoip_country)
 
 You can force in a "blank" field to be populated via the autoincrement with awk:
 
@@ -47,3 +47,9 @@ And then load in via a CSV import
 
 You should be aware that within this the UK is set as *GB* when you add an "ip
 redirect entry".
+
+### Finally
+
+I work at [udox](http://www.u-dox.com). We have lots more django code available
+at our [github page](http://www.github.com/udox) that you might find useful. You
+can find more about me at [jaymz.eu](http://jaymz.eu).
