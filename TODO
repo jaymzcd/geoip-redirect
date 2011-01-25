@@ -2,3 +2,4 @@
 * Hook in so we can redirect when we dont know where they're from (started via
   the new settings added for MISSING_X)
 * Add better handling of the IgnoreURLs to paths (maybe hook into django.urls)
+* Use an invert of the set of country codes to show a redirect to (eg everyone /but/ usa)
