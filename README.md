@@ -30,6 +30,11 @@ IgnoreURL patterns and settings **PROCESS_IGNORES** to *True* in settings. This
 will do a lookup when the middleware starts and cache a list of URLs to ignore.
 These are simply CharFields for now.
 
+If you only want the redirect to appear when a user lands on the homepage (in this
+case a *request.path* matching "/") then set **HOMEPAGE_ONLY** to *True*. This
+will force the middleware to return the normal response when other sub-urls
+are accessed.
+
 ### Ip Lookup Data source
 
 Database via: [maxmind](http://www.maxmind.com/app/geoip_country)
