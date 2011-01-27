@@ -8,6 +8,8 @@ from django.utils.encoding import smart_str
 class GeoIPMiddleWare(object):
 
     def __init__(self):
+        # Pull in and grab our conf for this from various settings files
+        # (could probably drop the if/elses here)
         if geo_setting('DEBUG_IP'):
             self.DEBUG_IP = geo_setting('DEBUG_IP')
         else:
@@ -22,6 +24,8 @@ class GeoIPMiddleWare(object):
         else:
             self.ignore_paths = None
 
+        self.homepage_only = geo_setting('HOMEPAGE_ONLY')
+        self.ignore_cookie = geo_setting('SET_IGNORE_COOKIE')
         self.user_code = None
 
 
@@ -30,6 +34,16 @@ class GeoIPMiddleWare(object):
         find a matching GeoIPRecord for it and that country code has an
         active redirect then inject the HTML into the template to show
         a lightbox to the user """
+
+        # If the user has the ignore cookie set and we're meant to respect
+        # it then just return the response already
+        if ('redirect_ignore' in request.COOKIES and self.ignore_cookie):
+            return response
+
+        # If we should only process on the homepage then return if we're on
+        # anything but that before continuing
+        if (self.homepage_only and request.path != '/'):
+            return response
 
         # The following is for inplace debugging forcing a particular IP
         if settings.DEBUG and self.DEBUG_IP:

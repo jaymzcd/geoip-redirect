@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'example/ignore-me/', 'dummy.views.sample_view'),
     (r'example/', 'dummy.views.sample_view'),
+    (r'^$', 'dummy.views.sample_view'),
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 )
