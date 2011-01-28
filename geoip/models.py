@@ -71,6 +71,8 @@ class IPRedirectEntry(models.Model):
         self.incoming_country_code = self.incoming_country_code.upper()
         super(IPRedirectEntry, self).save()
 
+    class Meta:
+        ordering = ('incoming_country_code',)
 
 class IgnoreURL(models.Model):
     """ Url paths to ignore from showing a redirect on """
