@@ -10,8 +10,8 @@ class GeoIPRecord(models.Model):
 
     start_ip = models.IPAddressField()
     end_ip = models.IPAddressField()
-    start_decimal = models.IntegerField()
-    end_decimal = models.IntegerField()
+    start_decimal = models.BigIntegerField()
+    end_decimal = models.BigIntegerField()
     country_code = models.CharField(max_length=2)
     country_name = models.CharField(max_length=25)
 
