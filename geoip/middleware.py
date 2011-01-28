@@ -61,7 +61,6 @@ class GeoIPMiddleWare(object):
 
         if '/admin' not in request.path and inject_data:
             # Slight hack for now to avoid spoiling admin
-
             if not self.ignore_paths or \
                 (self.ignore_paths and request.path not in self.ignore_paths):
 

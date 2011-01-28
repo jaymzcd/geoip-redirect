@@ -35,6 +35,14 @@ case a *request.path* matching "/") then set **HOMEPAGE_ONLY** to *True*. This
 will force the middleware to return the normal response when other sub-urls
 are accessed.
 
+For now if you want that "remember choice" checkbox to work you need to hook in
+a url to your conf:
+
+    # handle save target redirect cookie
+    (r'geoip/savetarget/', 'geoip.views.save_target'),
+
+This part also reliies on jQuery being present to do the POST submit via ajax.
+
 ### Ip Lookup Data source
 
 Database via: [maxmind](http://www.maxmind.com/app/geoip_country)
