@@ -1,19 +1,28 @@
-# geoip-redirect
+# GEOIP-REDIRECT Middleware & Decorators
 
 ## A django app to redirect based on an ip lookup
 
 ### Installation
 Installing this is pretty simple - add the middleware and then configure it as
 you need. You can test it by giving it an IP to *always* return regardless
-of the user's current REMOTE_ADDR value.
+of the user's current REMOTE_ADDR value. You can either enable the middleware
+to process *all* views or alternativly import `geoip_redirect` and add
+it as a decorator to your particular view(s).
 
-Add:
+To activate the middleware add:
 
     'geoip.middleware.GeoIPMiddleWare',
 
-To your MIDDLEWARE_CLASSES tuple and *geoip* to your INSTALLED_APPS.
+To your MIDDLEWARE_CLASSES tuple and *geoip* to your INSTALLED_APPS. To use
+it on a view instead then do the following:
 
-### Usage
+    from geoip.decorators import geoip_redirect
+    
+    @geoip_redirect
+    def my_view(request):
+        return HttpResponse('test')
+
+### Configuration & Usage
 
 You have 2 options - you can enable **REDIRECT_ALL** in the geoip settings
 file & supply a list of codes or you can add admin entries with custom text
