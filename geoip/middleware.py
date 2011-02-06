@@ -5,7 +5,7 @@ from geoip.exceptions import NoGeoRedirectFound
 from django.conf import settings
 from django.utils.encoding import smart_str
 
-class GeoIPMiddleWare(object):
+class GeoIPMiddleware(object):
 
     def __init__(self):
         # Pull in and grab our conf for this from various settings files

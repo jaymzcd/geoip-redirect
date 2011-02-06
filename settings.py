@@ -75,7 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'geoip.middleware.GeoIPMiddleWare',
+    #'geoip.middleware.GeoIPMiddleWare', # Enable this to have it apply for all views
 )
 
 ROOT_URLCONF = 'geoipredirect.urls'
