@@ -29,7 +29,7 @@ class GeoIPRecord(models.Model):
             raise InvalidDottedIP
 
         bounds = GeoIPRecord.objects.filter(start_decimal__lte=input_decimal,
-            end_decimal__gt=input_decimal)
+            end_decimal__gte=input_decimal)
 
         # In theory we should only have 1 record here
         try:
