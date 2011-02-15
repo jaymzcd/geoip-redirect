@@ -1,11 +1,11 @@
-from django.template.loader import render_to_string
+﻿from django.template.loader import render_to_string
 from geoip.models import GeoIPRecord, IPRedirectEntry, IgnoreURL
 from geoip.conf import geo_setting
 from geoip.exceptions import NoGeoRedirectFound
 from django.conf import settings
 from django.utils.encoding import smart_str
 
-class GeoIPMiddleWare(object):
+class GeoIPMiddleware(object):
 
     def __init__(self):
         # Pull in and grab our conf for this from various settings files
@@ -44,15 +44,15 @@ class GeoIPMiddleWare(object):
         # anything but that before continuing
         if (self.homepage_only and request.path != '/'):
             return response
-
+            
         # The following is for inplace debugging forcing a particular IP
         if settings.DEBUG and self.DEBUG_IP:
             inbound_ip = self.DEBUG_IP
         else:
             inbound_ip = request.META['REMOTE_ADDR']
-
+            
         self.user_code = GeoIPRecord.get_code(inbound_ip)
-
+        
         if(geo_setting('REDIRECT_ALL') and self.user_code in geo_setting('REDIRECT_CODES')):
             context = dict(incoming_country_code=self.user_code, target_domain=self.REDIRECT_DOMAIN)
             inject_data = render_to_string('geoip/base_redirect.html', context)
